@@ -79,6 +79,14 @@ Bubble.ChartBubbleComponent = Ember.Component.extend({
     var xAxis = d3.svg.axis().orient("bottom").scale(xScale).ticks(12, d3.format(",d"));
     var yAxis = d3.svg.axis().scale(yScale).orient("left");
 
+    // Tooltips
+    // TODO Make more agnostic.
+    tip = d3.tip().attr('class', 'tooltip').html(function(d) {
+      return d[0] + "<br>" +
+        xLabel + ": " + x(d) + "<br>" +
+        yLabel + ": " + y(d) + "<br>"
+    });
+
     svg = svg.append("g")
       .attr("transform", this.get('transformG'));
 
@@ -119,9 +127,13 @@ Bubble.ChartBubbleComponent = Ember.Component.extend({
         .attr("class", "bubble")
         .style("fill", function(d) { return colorScale(color(d)); })
         .call(position)
-        .sort(order);
+        .sort(order)
+        .call(tip)
+        .on('mouseover', tip.show)
+        .on('mouseout', tip.hide);
 
-    // Add a title.
+
+    // Add a title
     bubble.append("title")
       .text(function(d) { return d[0]; });
   },
