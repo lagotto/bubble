@@ -2,43 +2,88 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Yeoman Ember Starter Kit</title>
+        <title>Bubble</title>
 
         <!-- build:css styles/main.css -->
         <link rel="stylesheet" href="styles/style.css">
         <!-- endbuild -->
-</head>
+    </head>
     <body>
-        <!-- build:js(app) scripts/components.js -->
+        <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
         <script src="bower_components/d3/d3.js"></script>
         <script src="bower_components/jquery/dist/jquery.js"></script>
-        <script src="bower_components/handlebars/handlebars.runtime.js"></script>
+        <script src="scripts/sample_data.js"></script>
+
+        <!-- build:js(app) scripts/bubble_chart.js -->
         <script src="bower_components/d3-tip/index.js"></script>
-        <script src="@@ember"></script>
-        <script src="@@ember_data"></script>
+        <script src="scripts/bubble_chart.js"></script>
         <!-- endbuild -->
+        <div id="chart"></div>
+    </body>
+<script>
 
-        <!-- build:js(.tmp) scripts/templates.js -->
-        <script src="scripts/compiled-templates.js"></script>
-        <!-- endbuild -->
+// var preparedData = [{
+//     citations: 20,
+//     views: 200,
+//     months: 30,
+//     url: "http://www.google.com",
+//     tooltip: "<br>hello<br>tooltip",
+// },
+// {
+//     citations: 10,
+//     views: 400,
+//     months: 20,
+//     url: "http://www.google.com2",
+//     tooltip: "<br>hello<br>tooltip2",
+// }];
 
-        <!-- build:js(.tmp) scripts/main.js -->
-        <script src="scripts/combined-scripts.js"></script>
-        <!-- endbuild -->
 
-        <!-- build:js scripts/plugins.js -->
-        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/affix.js"></script>
-        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/alert.js"></script>
-        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/dropdown.js"></script>
-        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tooltip.js"></script>
-        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/modal.js"></script>
-        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/transition.js"></script>
-        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/button.js"></script>
-        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/popover.js"></script>
-        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/carousel.js"></script>
-        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/scrollspy.js"></script>
-        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/collapse.js"></script>
-        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tab.js"></script>
-        <!-- endbuild -->
-</body>
+// Convert, for example, into this format:
+// [
+// {
+//     citations:
+//     views:
+//     months:
+//     journal:
+//     url:
+//     tooltip:
+// },
+// ]
+
+var preparedData = _.map(data["data"], function (d) {
+    function monthDiff(d1, d2) {
+        months = (d2.getFullYear() - d1.getFullYear()) * 12;
+        months -= d1.getMonth() + 1;
+        months += d2.getMonth();
+        return months <= 0 ? 0 : months;
+    }
+
+    var date = new (Function.prototype.bind.apply(
+        Date, [null].concat(d["issued"]["date-parts"])
+    ))
+
+    var months = monthDiff(date, new Date())
+
+    return {
+        citations: d["cited"],
+        months: months,
+        views: d["viewed"],
+        tooltip: d["title"],
+        url: d["canonical_url"],
+        journal: d["title"]
+    }
+});
+
+// And then configure the chart.
+BubbleChart.create($("#chart")[0], {
+    width: 1000,
+    height: 600,
+    x: "months",
+    y: "views",
+    radius: "citations",
+    category: "journal"
+}, preparedData);
+
+</script>
+
 </html>

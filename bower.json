@@ -1,13 +1,11 @@
 {
   "name": "bubble",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "dependencies": {
-    "ember": "1.6.1",
-    "handlebars": "1.3.0",
-    "ember-data": "1.0.0-beta.8",
-    "bootstrap-sass-official": "3.1.1"
+    "d3": "3.4.13",
+    "jquery": "2.1.2-pre",
+    "d3-tip": "0.6.6"
   },
   "devDependencies": {
-    "ember-mocha-adapter": "0.2.1"
   }
 }
