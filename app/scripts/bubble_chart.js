@@ -25,7 +25,9 @@ BubbleChart.prototype.create = function(el, properties, data) {
   return this;
 }
 
-BubbleChart.prototype.update = function() {
+BubbleChart.prototype.update = function(properties, data) {
+  this.properties = properties || this.properties;
+  this.data = data || this.data;
   this._updateDomains();
   this._draw();
 }
