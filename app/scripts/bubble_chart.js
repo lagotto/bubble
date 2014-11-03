@@ -22,7 +22,7 @@ BubbleChart.prototype.create = function(el, properties, data) {
   this._scales();
   this._setup();
   this.update();
-  this
+  return this;
 }
 
 BubbleChart.prototype.update = function() {
