@@ -10,11 +10,7 @@ BubbleChart.prototype.create = function(el, properties, data) {
   this.width = properties.width;
   this.height = properties.height;
 
-  // Accessors
-  this.x = function(d) { return d[properties.x]; }
-  this.y = function(d) { return d[properties.y]; }
-  this.radius = function(d) { return d[properties.radius]; }
-  this.category = function(d) { return d[properties.category]; }
+  this.updateAccessors();
 
   this.margin = {top: 20, right: 20, bottom: 40, left: 40};
 
@@ -25,9 +21,17 @@ BubbleChart.prototype.create = function(el, properties, data) {
   return this;
 }
 
+BubbleChart.prototype.updateAccessors = function() {
+  this.x = function(d) { return d[this.properties.x]; }
+  this.y = function(d) { return d[this.properties.y]; }
+  this.radius = function(d) { return d[this.properties.radius]; }
+  this.category = function(d) { return d[this.properties.category]; }
+}
+
 BubbleChart.prototype.update = function(properties, data) {
   this.properties = properties || this.properties;
   this.data = data || this.data;
+  this.updateAccessors();
   this._updateDomains();
   this._draw();
 }
@@ -97,25 +101,25 @@ BubbleChart.prototype._setup  = function () {
 
 BubbleChart.prototype._updateDomains = function () {
   // Domains
-  this.radiusScale.domain([-1, d3.max(this.data, this.radius)]);
+  this.radiusScale.domain([-1, d3.max(this.data, this.radius.bind(this))]);
 
-  this.xScale.domain(d3.extent(this.data, this.x));
+  this.xScale.domain(d3.extent(this.data, this.x.bind(this)));
   // Extend xScale to cover the largest and smallest bubble
   this.xScale.domain(
     [
       0,
-      d3.max(this.data, this.x) +
-        this.xScale.invert(this.radiusScale(d3.max(this.data, this.radius)))
+      d3.max(this.data, this.x.bind(this)) +
+        this.xScale.invert(this.radiusScale(d3.max(this.data, this.radius.bind(this))))
     ]
   );
 
   // Extend the yScale to cover the largest bubble
-  this.yScale.domain([0, d3.max(this.data, this.y)]);
+  this.yScale.domain([0, d3.max(this.data, this.y.bind(this))]);
   this.yScale.domain(
     [
       0,
-      d3.max(this.data, this.y) + this.yScale.invert(this.h() -
-        this.radiusScale(d3.max(this.data, this.radius)))
+      d3.max(this.data, this.y.bind(this)) + this.yScale.invert(this.h() -
+        this.radiusScale(d3.max(this.data, this.radius.bind(this))))
     ]
   );
 
