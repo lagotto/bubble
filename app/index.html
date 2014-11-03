@@ -19,6 +19,7 @@
         <script src="scripts/bubble_chart.js"></script>
         <!-- endbuild -->
         <div id="chart"></div>
+        <button id="update">Update</button>
     </body>
 <script>
 
@@ -75,7 +76,9 @@ var preparedData = _.map(data["data"], function (d) {
 });
 
 // And then configure the chart.
-BubbleChart.create($("#chart")[0], {
+var bubble = new BubbleChart;
+
+bubble.create($("#chart")[0], {
     width: 1000,
     height: 600,
     x: "months",
@@ -84,6 +87,24 @@ BubbleChart.create($("#chart")[0], {
     category: "journal"
 }, preparedData);
 
-</script>
+$("#update").click(function () {
+    console.log('clicked');
+    preparedData = _.map(preparedData, function (d) {
+        d.months = Math.random() * 200;
+        d.views = Math.random() * 10000;
+        d.citations = Math.random() * 100;
+        return d;
+    });
 
+    bubble.update({
+        width: 1000,
+        height: 600,
+        x: "months",
+        y: "views",
+        radius: "citations",
+        category: "journal"
+    }, preparedData);
+});
+
+</script>
 </html>
