@@ -69,9 +69,9 @@ var preparedData = _.map(data["report"]["items"], function (d) {
         citations: d["cited"],
         months: months,
         views: d["viewed"],
-        tooltip: d["title"],
         url: d["canonical_url"],
-        journal: d["title"]
+        journal: d["journal"],
+        title: d["title"]
     }
 });
 
@@ -84,7 +84,8 @@ bubble.create($("#chart")[0], {
     x: "months",
     y: "views",
     radius: "citations",
-    category: "journal"
+    category: "journal",
+    tooltip: "title"
 }, preparedData);
 
 $("#update").click(function () {
@@ -102,7 +103,8 @@ $("#update").click(function () {
         x: "months",
         y: "views",
         radius: "citations",
-        category: "journal"
+        category: "journal",
+        tooltip: "title"
     }, preparedData);
 });
 

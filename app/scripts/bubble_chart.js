@@ -26,6 +26,7 @@ BubbleChart.prototype._setAccessors = function() {
   this.y = function(d) { return d[this.properties.y]; }
   this.radius = function(d) { return d[this.properties.radius]; }
   this.category = function(d) { return d[this.properties.category]; }
+  this.tooltip = function(d) { return d[this.properties.tooltip]; }
 }
 
 BubbleChart.prototype._setLabels = function() {
@@ -74,7 +75,8 @@ BubbleChart.prototype._setup  = function () {
 
   // Tooltips
   var tooltip = function (d) {
-    return this.categoryLabel + ": " + this.category(d) + "<br>" +
+    return '<strong>' + this.tooltip(d) + '</strong><br>' +
+      this.categoryLabel + ": " + this.category(d) + "<br>" +
       this.radiusLabel + ": " + this.radius(d) + "<br>" +
       this.xLabel + ": " + this.x(d) + "<br>" +
       this.yLabel + ": " + this.y(d) + "<br>"
