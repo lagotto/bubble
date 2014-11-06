@@ -187,7 +187,7 @@ BubbleChart.prototype.transformX = function(){
 
 BubbleChart.prototype._draw = function() {
     // Defines a sort order so that the smallest dots are drawn on top.
-    var order = function (one, two) { return this.radius(one) - this.radius(two); }
+    var order = function (a, b) { return this.radius(b) - this.radius(a); }
 
     // Defines fill color
     var fill = function(d) { return this.colorScale(this.category(d)); }
@@ -207,14 +207,13 @@ BubbleChart.prototype._draw = function() {
     this.data = this.data.map(function (d, i) {
         d.id = i;
         return d;
-    })
+    }).sort(order.bind(this))
 
     // Add a bubble per row.
     var bubbles = this.bubbles.selectAll(".bubble")
         .data(this.data, function(d) { return d.id })
-        .sort(order.bind(this))
 
-    bubbles.enter().append("circle")
+    bubbles.enter().insert("circle")
         .attr("class", "bubble")
         .style("fill", fill.bind(this))
         .call(position.bind(this))
@@ -229,6 +228,8 @@ BubbleChart.prototype._draw = function() {
 
     bubbles.transition()
         .call(position.bind(this))
+
+    bubbles.order()
 
     bubbles.exit().remove();
 }
