@@ -196,33 +196,36 @@ BubbleChart.prototype._draw = function() {
     var position = function(bubble) {
         var cx = function (d) { return this.xScale(this.x(d)); }
         var cy = function (d) { return this.yScale(this.y(d)); }
-        var r = function(d) { return this.radiusScale(this.radius(d)) };
+        var r = function(d) { return this.radiusScale(this.radius(d)); }
         bubble .attr("cx", cx.bind(this))
                      .attr("cy", cy.bind(this))
                      .attr("r",  r.bind(this));
     }
 
+    // Due to sorting, the default D3 array index data-join doesn't work.
+    // So we assign ids to each datum.
+    this.data = this.data.map(function (d, i) {
+        d.id = i;
+        return d;
+    })
+
     // Add a bubble per row.
     var bubbles = this.bubbles.selectAll(".bubble")
-        .data(this.data)
-        // , function (d) {
-        //   return d.url;
-        // });
+        .data(this.data, function(d) { return d.id })
+        .sort(order.bind(this))
 
     bubbles.enter().append("circle")
-        // .transition()
         .attr("class", "bubble")
         .style("fill", fill.bind(this))
         .call(position.bind(this))
-        .sort(order.bind(this))
         .on('mouseover', this.tip.show)
         .on('mouseout', this.tip.hide)
         .on('click', function (d) {
             window.location = d.url;
         });
 
-            // .append("title")
-            //   .text(this.category) // Titles
+        // .append("title")
+        //   .text(this.category) // Titles
 
     bubbles.transition()
         .call(position.bind(this))
