@@ -65,14 +65,17 @@ BubbleChart.prototype._scales = function() {
     this.colorScale = colorScale;
 }
 
+BubbleChart.prototype._axes = function () {
+    this.xAxis = d3.svg.axis().orient("bottom").scale(this.xScale).ticks(12, d3.format(",d"));
+    this.yAxis = d3.svg.axis().scale(this.yScale).orient("left");
+}
+
 BubbleChart.prototype._setup  = function () {
     this._setAccessors();
     this._scales();
+    this._axes();
+    this._setDomains();
     this._setLabels();
-
-    // Labels
-    this.xAxis = d3.svg.axis().orient("bottom").scale(this.xScale).ticks(12, d3.format(",d"));
-    this.yAxis = d3.svg.axis().scale(this.yScale).orient("left");
 
     // Tooltips
     var tooltip = function (d) {
@@ -109,24 +112,6 @@ BubbleChart.prototype._setup  = function () {
 
     this.tip.direction(direction.bind(this));
 
-    // Add an x-axis label.
-    this.svg.append("text")
-            .attr("class", "x label")
-            .attr("text-anchor", "middle")
-            .attr("x", this.w() / 2 + this.margin.left)
-            .attr("y", this.height - (this.margin.bottom / 2))
-            .text(this.properties.xLabel);
-
-    // Add a y-axis label.
-    this.svg.append("text")
-            .attr("class", "y label")
-            .attr("text-anchor", "middle")
-            .attr("y", 0)
-            .attr("x", 0 - this.h() / 2)
-            .attr("dy", "2em")
-            .attr("transform", "rotate(-90)")
-            .text(this.properties.yLabel);
-
     svg = this.svg
         .call(this.tip)
         .append("g")
@@ -150,10 +135,11 @@ BubbleChart.prototype._setup  = function () {
 BubbleChart.prototype.update = function(properties, data) {
     this.properties = _.extend(this.properties, properties);
     this.data = data || this.data;
-    this._setLabels();
     this._setAccessors();
     this._scales();
+    this._axes();
     this._setDomains();
+    this._setLabels();
     this._draw();
 }
 
@@ -189,6 +175,24 @@ BubbleChart.prototype._setLabels = function() {
     function capitalise(s) {
         return s.charAt(0).toUpperCase() + s.slice(1);
     }
+
+    // Add an x-axis label.
+    this.svg.append("text")
+            .attr("class", "x label")
+            .attr("text-anchor", "middle")
+            .attr("x", this.w() / 2 + this.margin.left)
+            .attr("y", this.height - (this.margin.bottom / 2))
+            .text(this.properties.xLabel);
+
+    // Add a y-axis label.
+    this.svg.append("text")
+            .attr("class", "y label")
+            .attr("text-anchor", "middle")
+            .attr("y", 0)
+            .attr("x", 0 - this.h() / 2)
+            .attr("dy", "2em")
+            .attr("transform", "rotate(-90)")
+            .text(this.properties.yLabel);
 
     this.tooltipLabel = capitalise(this.properties.tooltip);
     this.categoryLabel = capitalise(this.properties.category);
