@@ -9,7 +9,7 @@ BubbleChart.prototype.create = function(el, properties, data) {
     this.properties = properties;
     this.width = properties.width;
     this.height = properties.height;
-    this.margin = {top: 20, right: 20, bottom: 40, left: 40};
+    this.margin = {top: 20, right: 20, bottom: 100, left: 100};
     this.data = data;
 
     this._setup();
@@ -67,8 +67,8 @@ BubbleChart.prototype._setup  = function () {
         return '<strong>' + this.tooltip(d) + '</strong><br>' +
             this.categoryLabel + ": " + this.category(d) + "<br>" +
             this.radiusLabel + ": " + this.radius(d) + "<br>" +
-            this.xLabel + ": " + this.x(d) + "<br>" +
-            this.yLabel + ": " + this.y(d) + "<br>"
+            this.properties.xLabel + ": " + this.x(d) + "<br>" +
+            this.properties.yLabel + ": " + this.y(d) + "<br>"
     }
 
     var direction = function (d) {
@@ -96,6 +96,24 @@ BubbleChart.prototype._setup  = function () {
 
     this.tip.direction(direction.bind(this));
 
+    // Add an x-axis label.
+    this.svg.append("text")
+            .attr("class", "x label")
+            .attr("text-anchor", "middle")
+            .attr("x", this.w() / 2 + this.margin.left)
+            .attr("y", this.height - (this.margin.bottom / 2))
+            .text(this.properties.xLabel);
+
+    // Add a y-axis label.
+    this.svg.append("text")
+            .attr("class", "y label")
+            .attr("text-anchor", "middle")
+            .attr("y", 0)
+            .attr("x", 0 - this.h() / 2)
+            .attr("dy", "2em")
+            .attr("transform", "rotate(-90)")
+            .text(this.properties.yLabel);
+
     svg = this.svg
         .call(this.tip)
         .append("g")
@@ -111,23 +129,6 @@ BubbleChart.prototype._setup  = function () {
     svg.append("g")
             .attr("class", "y axis")
             .call(this.yAxis);
-
-    // Add an x-axis label.
-    svg.append("text")
-            .attr("class", "x label")
-            .attr("text-anchor", "end")
-            .attr("x", this.w())
-            .attr("y", this.h() - 6)
-            .text(this.xLabel);
-
-    // Add a y-axis label.
-    svg.append("text")
-            .attr("class", "y label")
-            .attr("text-anchor", "end")
-            .attr("y", 6)
-            .attr("dy", ".75em")
-            .attr("transform", "rotate(-90)")
-            .text(this.yLabel);
 
     this.bubbles = svg.append("g")
         .attr("class", "bubbles");
@@ -175,8 +176,6 @@ BubbleChart.prototype._setLabels = function() {
         return s.charAt(0).toUpperCase() + s.slice(1);
     }
 
-    this.xLabel = capitalise(this.properties.x);
-    this.yLabel = capitalise(this.properties.y);
     this.radiusLabel = capitalise(this.properties.radius);
     this.categoryLabel = capitalise(this.properties.category);
 }
