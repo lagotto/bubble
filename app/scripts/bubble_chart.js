@@ -64,11 +64,12 @@ BubbleChart.prototype._setup  = function () {
 
     // Tooltips
     var tooltip = function (d) {
-        return '<strong>' + this.tooltip(d) + '</strong><br>' +
+        return '<strong>' +
+            this.tooltipLabel + ": " + this.tooltip(d) + '</strong><br>' +
             this.categoryLabel + ": " + this.category(d) + "<br>" +
-            this.radiusLabel + ": " + this.radius(d) + "<br>" +
             this.properties.xLabel + ": " + this.x(d) + "<br>" +
-            this.properties.yLabel + ": " + this.y(d) + "<br>"
+            this.properties.yLabel + ": " + this.y(d) + "<br>" +
+            this.properties.radiusLabel + ": " + this.radius(d) + "<br>"
     }
 
     var direction = function (d) {
@@ -135,7 +136,7 @@ BubbleChart.prototype._setup  = function () {
 }
 
 BubbleChart.prototype.update = function(properties, data) {
-    this.properties = properties || this.properties;
+    this.properties = _.extend(this.properties, properties);
     this.data = data || this.data;
     this._setLabels();
     this._setAccessors();
@@ -176,7 +177,7 @@ BubbleChart.prototype._setLabels = function() {
         return s.charAt(0).toUpperCase() + s.slice(1);
     }
 
-    this.radiusLabel = capitalise(this.properties.radius);
+    this.tooltipLabel = capitalise(this.properties.tooltip);
     this.categoryLabel = capitalise(this.properties.category);
 }
 

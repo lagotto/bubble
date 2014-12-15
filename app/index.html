@@ -84,6 +84,7 @@ bubble.create($("#chart")[0], {
     y: "views",
     yLabel: "Total Usage",
     radius: "citations",
+    radiusLabel: "Citations",
     category: "journal",
     colors: {
         'PLOS ONE': '#fda328',                        // Orange
@@ -113,6 +114,7 @@ $("#update").click(function () {
         x: "months",
         y: "views",
         radius: "citations",
+        radiusLabel: "Scopus Citations",
         category: "journal",
         tooltip: "title"
     }, preparedData);
