@@ -83,6 +83,16 @@ bubble.create($("#chart")[0], {
     y: "views",
     radius: "citations",
     category: "journal",
+    colors: {
+        'PLOS ONE': '#fda328',                        // Orange
+        'PLOS Biology': '#1ebd21',                    // Green
+        'PLOS Computational Biology': '#1ebd21',      // Green
+        'PLOS Genetics': '#1ebd21',                   // Green
+        'PLOS Medicine': '#891fb1',                   // Purple
+        'PLOS Pathogens': '#891fb1',                  // Purple
+        'PLOS Neglected Tropical Diseases': '#891fb1',// Purple
+        'default': '#b526fb'                          // Purple
+    },
     tooltip: "title"
 }, preparedData);
 

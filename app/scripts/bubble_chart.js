@@ -26,12 +26,26 @@ BubbleChart.prototype._setAccessors = function() {
     this.tooltip = function(d) { return d[this.properties.tooltip]; }
 }
 
+BubbleChart.prototype._color = function (d) {
+    var color = this.properties.colors[d];
+    if(color) {
+        return color;
+    } else {
+        return this.properties.colors.default;
+    }
+}
+
 BubbleChart.prototype._scales = function() {
     // Scales
     var xScale = d3.scale.linear().range([0, this.w()]);
     var yScale = d3.scale.linear().range([this.h(), 0]);
     var radiusScale = d3.scale.sqrt().range([0, 40])
-    var colorScale = d3.scale.category10();
+
+    if(this.properties.colors) {
+        var colorScale = this._color;
+    } else {
+        var colorScale = d3.scale.category10();
+    }
 
     this.xScale = xScale;
     this.yScale = yScale;
