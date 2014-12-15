@@ -2,6 +2,7 @@
   "name": "bubble",
   "version": "0.0.1",
   "dependencies": {
+    "lodash": "*",
     "d3": "3.4.13",
     "jquery": "2.1.1",
     "d3-tip": "0.6.6"
