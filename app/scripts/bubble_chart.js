@@ -21,9 +21,16 @@ BubbleChart.prototype.create = function(el, properties, data) {
 BubbleChart.prototype._setAccessors = function() {
     this.x = function(d) { return d[this.properties.x]; }
     this.y = function(d) { return d[this.properties.y]; }
-    this.radius = function(d) { return d[this.properties.radius]; }
     this.category = function(d) { return d[this.properties.category]; }
     this.tooltip = function(d) { return d[this.properties.tooltip]; }
+}
+
+BubbleChart.prototype.radius = function (d) {
+    if(this.properties.radius) {
+        return d[this.properties.radius];
+    } else {
+        return 1;
+    }
 }
 
 BubbleChart.prototype._color = function (d) {
@@ -39,7 +46,12 @@ BubbleChart.prototype._scales = function() {
     // Scales
     var xScale = d3.scale.linear().range([0, this.w()]);
     var yScale = d3.scale.linear().range([this.h(), 0]);
-    var radiusScale = d3.scale.sqrt().range([0, 40])
+
+    if(this.properties.radius) {
+        var radiusScale = d3.scale.sqrt().range([0, 40]);
+    } else {
+        var radiusScale = d3.scale.linear().range([0,4]);
+    }
 
     if(this.properties.colors) {
         var colorScale = this._color;
@@ -140,6 +152,7 @@ BubbleChart.prototype.update = function(properties, data) {
     this.data = data || this.data;
     this._setLabels();
     this._setAccessors();
+    this._scales();
     this._setDomains();
     this._draw();
 }
