@@ -9,7 +9,7 @@ BubbleChart.prototype.create = function(el, properties, data) {
     this.properties = properties;
     this.width = properties.width;
     this.height = properties.height;
-    this.margin = {top: 20, right: 20, bottom: 100, left: 100};
+    this.margin = {top: 20, right: 20, bottom: 100, left: 80};
     this.data = data;
 
     this._setup();
@@ -190,7 +190,7 @@ BubbleChart.prototype._setLabels = function() {
             .attr("text-anchor", "middle")
             .attr("y", 0)
             .attr("x", 0 - this.h() / 2)
-            .attr("dy", "2em")
+            .attr("dy", "0.75em")
             .attr("transform", "rotate(-90)")
             .text(this.properties.yLabel);
 
