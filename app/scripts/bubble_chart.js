@@ -83,7 +83,7 @@ BubbleChart.prototype._setup  = function () {
             this.tooltipLabel + ": " + this.tooltip(d) + '</strong><br>' +
             this.categoryLabel + ": " + this.category(d) + "<br>" +
             this.properties.xLabel + ": " + this.x(d) + "<br>" +
-            this.properties.yLabel + ": " + this.y(d) + "<br>" +
+            this.properties.yLabel + ": " + d3.format(",d")(this.y(d)) + "<br>" +
             this.properties.radiusLabel + ": " + this.radius(d) + "<br>"
     }
 
