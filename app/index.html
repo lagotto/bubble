@@ -21,34 +21,6 @@
     </body>
 <script>
 
-// var preparedData = [{
-//     citations: 20,
-//     views: 200,
-//     months: 30,
-//     url: "http://www.google.com",
-//     tooltip: "<br>hello<br>tooltip",
-// },
-// {
-//     citations: 10,
-//     views: 400,
-//     months: 20,
-//     url: "http://www.google.com2",
-//     tooltip: "<br>hello<br>tooltip2",
-// }];
-
-
-// Convert, for example, into this format:
-// [
-// {
-//     citations:
-//     views:
-//     months:
-//     journal:
-//     url:
-//     tooltip:
-// },
-// ]
-
 var preparedData = _.map(data["report"]["items"], function (d) {
     function monthDiff(d1, d2) {
         months = (d2.getFullYear() - d1.getFullYear()) * 12;
